@@ -1,0 +1,95 @@
+#include<iostream>
+#include<cstdio>
+#include<malloc.h>
+#include<stdlib.h>
+using namespace std;
+typedef int T;
+T length;
+typedef struct ListNode{
+	T value;//值
+	ListNode* next; 
+}Node,*PNode;//链表节点
+PNode CreateList(int len){
+	int num;
+	PNode PHead = (PNode)malloc(sizeof(Node));//创建头节点
+	if(PHead==NULL){
+		cout<<"Error"<<endl;
+		return NULL;
+	}//判异常 空间分配失败
+	PNode PEnd = PHead;
+	PEnd->next=NULL;
+	for(int i=0;i<len;++i) {
+        PNode pNew = (PNode)malloc(sizeof(Node));    //    分配一个新节点
+        if (pNew == NULL) {
+        	cout<<"Error"<<endl;
+            return NULL;//申请异常 
+        }
+        scanf("%d",&num);
+        pNew->value=num;
+        PEnd->next=pNew;
+        pNew->next=NULL;
+        PEnd = pNew;
+ 	}
+ 	cout<<"successful"<<endl;
+ 	return PHead;
+} 
+int getListlen(PNode PHead){
+	PNode p=PHead->next;
+	if(p==NULL)
+		cout<<"Error"<<endl;
+	while(p!=NULL){
+		p=p->next;
+		++length;
+	}
+	return length;	
+}//读取链节的长度
+void FindList(PNode List,int num){
+	PNode P = List->next;
+	int index=0;
+	while(P!=NULL&&P->value!=num){
+		P=P->next;
+		++index; 
+	}
+	if(P!=NULL)
+	cout<<index+1<<endl;
+	else
+	cout<<"无这个位置"<<endl; 
+} //寻找位置
+void InsertList(int num,int pos,PNode List){
+	int len=getListlen(List);//查找元素个数 
+	//往首节点插元素
+	if(pos==1){
+		PNode pNew = (PNode)malloc(sizeof(Node));//创建一个新的节点
+		pNew->value=num;
+		pNew->next=List->next;
+		PNode pHead;
+		pHead->next=pNew; 
+	}else if(pos>len){
+		PNode pNew=(PNode)malloc(sizeof(Node));//创建一个新的节点
+		pNew->value=num;
+		PNode p= List->next;
+		while(p!=NULL){
+			p=p->next;//p停在NULL位置 
+		}
+		pNew->next=p;
+		p->next=pNew; 
+	}else{
+	//往中间插元素 
+	PNode p= List->next;
+	int index=1;
+	while(p!=NULL&&index<pos){
+		p=p->next;//停在pos-1位置上
+		++index;
+	}
+	PNode pNew = (PNode)malloc(sizeof(Node));//创建一个新的节点
+	pNew->value=num;
+	pNew->next=p->next;
+	p->next=pNew;
+	}
+} //往pos位置前插入数据 
+int main(){
+	PNode PHead = CreateList(6);
+	int num=getListlen(PHead);
+	cout<<num<<endl;
+	FindList(PHead,5);
+}
